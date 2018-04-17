@@ -13,9 +13,9 @@ namespace AsyncLocal.SimpleInjector.Web.Controllers
             _correlationContainer = correlationContainer;
         }
 
-        public Task<IEnumerable<string>> GetCustomerTags(int customerId)
+        public Task<Customer> GetCustomer(int customerId)
         {
-            return Task.FromResult(new[] { "elm", "is", "cool" }.AsEnumerable());
+            return Task.FromResult(new Customer());
         }
     }
 }

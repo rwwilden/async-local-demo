@@ -21,18 +21,22 @@ namespace AsyncLocal.SimpleInjector.Web.Controllers
             _correlationContainer = correlationContainer;
         }
 
-        public async Task<IEnumerable<string>> GetCustomerTags(int customerId)
+        public async Task<Customer> GetCustomer(int customerId)
         {
-            // Get async local correlation id.
-            var correlationId = _correlationContainer.GetCorrelationId();
-            _logger.LogWarning($"Getting customer tags for {customerId} ({correlationId})");
+            // Get async local correlation id and log.
+            var correlationIdBeforeAwait = _correlationContainer.GetCorrelationId();
+            _logger.LogWarning($"Getting customer by id {customerId} ({correlationIdBeforeAwait})");
 
             // Call decoratee.
             var decoratee = _decorateeFunc.Invoke();
-            var values = await decoratee.GetCustomerTags(customerId);
+            var customer = await decoratee.GetCustomer(customerId);
+
+            // For demo purposes: get correlation id again after await and log.
+            var correlationIdAfterAwait = _correlationContainer.GetCorrelationId();
+            _logger.LogWarning($"Retrieved customer by id {customerId} ({correlationIdBeforeAwait})");
 
             // Return values.
-            return values;
+            return customer;
         }
     }
 }

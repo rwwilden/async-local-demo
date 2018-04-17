@@ -18,18 +18,17 @@ namespace AsyncLocal.SimpleInjector.Web.Controllers
         }
 
         [HttpGet]
-        [Route("tags")]
-        public async Task<IEnumerable<string>> Get(int customerId)
+        public async Task<Customer> Get(int id)
         {
             // Set async local correlation id.
             var correlationId = Guid.NewGuid();
             _correlationContainer.SetCorrelationId(correlationId);
 
             // Call controller dependency (decorated by LoggingDecorator).
-            var tags = await _customerService.GetCustomerTags(customerId);
+            var customer = await _customerService.GetCustomer(id);
 
             // Return values.
-            return tags;
+            return customer;
         }
     }
 }
